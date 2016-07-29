@@ -66,8 +66,10 @@ public class ZDDWebViewActivity extends AppCompatActivity {
                     // 防止调用多次动画
                     isAnimStart = true;
                     mProgressBar.setProgress(newProgress);
+                    // 开启属性动画让进度条平滑消失
                     startDismissAnimation(mProgressBar.getProgress());
                 } else {
+                    // 开启属性动画让进度条平滑递增
                     startProgressAnimation(newProgress);
                 }
             }
@@ -81,6 +83,9 @@ public class ZDDWebViewActivity extends AppCompatActivity {
         mWebView.loadUrl(url);
     }
 
+    /**
+     * progressBar递增动画
+     */
     private void startProgressAnimation(int newProgress) {
         ObjectAnimator animator = ObjectAnimator.ofInt(mProgressBar, "progress", currentProgress, newProgress);
         animator.setDuration(300);
@@ -90,13 +95,14 @@ public class ZDDWebViewActivity extends AppCompatActivity {
 
     /**
      * progressBar消失动画
-     * progress: 动画开始前progressBar的进度
      */
     private void startDismissAnimation(final int progress) {
         ObjectAnimator anim = ObjectAnimator.ofFloat(mProgressBar, "alpha", 1.0f, 0.0f);
-        anim.setDuration(1500);
-        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setDuration(1500);  // 动画时长
+        anim.setInterpolator(new DecelerateInterpolator());     // 减速
+        // 关键, 添加动画进度监听器
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float fraction = valueAnimator.getAnimatedFraction();      // 0.0f ~ 1.0f
@@ -137,7 +143,7 @@ public class ZDDWebViewActivity extends AppCompatActivity {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {  // 返回键的KEYCODE
             if (mWebView.canGoBack()) {
                 mWebView.goBack();
                 return true;  // 拦截
