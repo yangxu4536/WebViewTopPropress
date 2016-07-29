@@ -52,7 +52,7 @@ public class ZDDWebViewActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return false;   //  false  在当前webview中打开url
+                return true;   // 在当前webview内部打开url
             }
         });
 
